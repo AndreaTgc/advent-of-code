@@ -13,7 +13,6 @@ sum1 = 0
 
 for row in lines[1:]:
     splitters = {i for i, c in enumerate(row) if c == "^"}
-    new_beams = set()
     new_counts = defaultdict(int)
     for pos in set(beams) | set(counts):
         hit = pos in splitters
@@ -21,17 +20,15 @@ for row in lines[1:]:
             c = counts[pos]
             if hit:
                 sum1 += 1
+                beams.remove(pos)
                 if pos - 1 >= 0:
-                    new_beams.add(pos - 1)
+                    beams.add(pos - 1)
                     new_counts[pos - 1] += c
                 if pos + 1 < width:
-                    new_beams.add(pos + 1)
+                    beams.add(pos + 1)
                     new_counts[pos + 1] += c
             else:
-                new_beams.add(pos)
                 new_counts[pos] += c
-
-    beams = new_beams
     counts = new_counts
 
 sum2 = sum(counts.values())
